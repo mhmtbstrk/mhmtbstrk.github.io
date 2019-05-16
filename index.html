@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+      <head>
+	     <meta charset="utf-8" content="text/html">
+		 <title>Canvas</title>
+	  </head>
+	  <body>
+	     <canvas id="canvas" width="800" height="600"></canvas>
+		 <script>
+		  var canvas = null,
+		  ctx = null,
+		  perSecond = 1000/30,
+		  ballX = 2,
+		  ballY = 2,
+		  ballXSpeed = 5,
+		  ballYSpeed = 6,
+		  paddleX = 400;
+		  
+		    var blue = "#0000FF";
+			var red = "#FF0000";
+			var green = "#008000";
+			var purple = "#800080";
+			var yellow = "#FFFF00";
+
+		  var b = false; //40
+		  var r = false; //20
+		  var g = false; //80
+		  var p = false; //60
+		  var y = false; //50
+		  
+ 
+		  const PADDLE_WIDTH = 100;
+		  const PADDLE_HEIGHT = 10;
+		  const PADDLE_FROM_EDGE = 60;
+		  
+		  const BRICK_HEIGHT = 30;
+		  const BRICK_WIDTH = 100;
+		  const FIRST_TOP = 40;
+		  const FIRST_BOTTOM = 70;
+		  const SECOND_TOP = 100;
+		  const SECOND_BOTTOM = 130;
+		  const BLUE_LEFT = 350;
+		  const BLUE_RIGHT = 450;
+		  const RED_LEFT= 200;
+		  const RED_RIGHT=300;
+		  const GREEN_LEFT=500;
+		  const GREEN_RIGHT=600;
+		  const PURPLE_LEFT=270;
+		  const PURPLE_RIGHT=370;
+		  const YELLOW_LEFT=430;
+		  const YELLOW_RIGHT=530;
+		  
+		 
+		  
+		  function mousePos(evt) {
+		    var rect = canvas.getBoundingClientRect();
+			var root = document.documentElement;
+			var mouseX = evt.clientX - rect.left - root.scrollLeft;
+			paddleX = mouseX;
+		  }
+		  
+		  
+		  window.onload = function () {
+		  canvas = document.getElementById("canvas");
+		  ctx = canvas.getContext("2d");
+		  setInterval(update,perSecond);
+		  canvas.addEventListener("mousemove",mousePos);
+		  }
+		  
+		  function update () {
+		    moveAll();
+			drawAll();
+			drawScore();
+		  }
+		  
+		  function ballReset() {
+		    
+			alert("Game Over");
+			
+		  }
+		  
+		  function moveAll () {
+		    ballX += ballXSpeed;
+			ballY += ballYSpeed;
+			
+			if (ballX > canvas.width) {
+			 ballXSpeed *= -1;
+			}
+			if (ballX < 0){
+			ballXSpeed *= -1;
+			}
+			if (ballY > canvas.height) { //bottom
+			 ballReset();
+			}
+			if (ballY < 0) {
+			ballYSpeed *= -1;
+			}
+			
+			var paddleTopY = canvas.height - PADDLE_FROM_EDGE;
+			var paddleBottomY = paddleTopY + PADDLE_HEIGHT;
+			var paddleLeftX = paddleX;
+			var paddleRightX = paddleLeftX + PADDLE_WIDTH;
+			if (ballY > paddleTopY && ballY < paddleBottomY &&
+			ballX > paddleLeftX && ballX < paddleRightX){
+			   ballYSpeed *= -1;
+			}
+			if (ballY > 300 && ballY < 308 && ballX > 350 && ballX < 465) {
+			ballYSpeed *= -1;
+			}
+		  if (b && r && g && p && y) {
+			alert("You won!!");
+			}
+		  
+		  }
+		  
+		  function drawAll() {
+		    colorBox("#000",0,0,canvas.width,canvas.height);
+			circle("#fff",ballX,ballY,10)
+			colorBox("#fff",paddleX,canvas.height-PADDLE_FROM_EDGE,PADDLE_WIDTH,PADDLE_HEIGHT);
+			colorBox(blue,350,40,100,30);
+			colorBox(red,200,40,100,30);
+			colorBox(green,500,40,100,30);
+			colorBox(purple,270,100,100,30);
+			colorBox(yellow,430,100,100,30);
+			colorBox("#C0C0C0",350,300,115,8);
+			
+			
+			
+			if (ballY > FIRST_TOP && ballY < FIRST_BOTTOM && ballX > BLUE_LEFT && ballX < BLUE_RIGHT) {
+			blue = "#000";
+			b = true;
+			
+			}
+			if (ballY > FIRST_TOP && ballY < FIRST_BOTTOM && ballX > RED_LEFT && ballX < RED_RIGHT) {
+			red = "#000";
+			r = true;
+			}
+			if (ballY > FIRST_TOP && ballY < FIRST_BOTTOM && ballX > GREEN_LEFT && ballX < GREEN_RIGHT) {
+			green = "#000";
+			g = true;
+			}
+			if (ballY > SECOND_TOP && ballY < SECOND_BOTTOM && ballX > PURPLE_LEFT && ballX < PURPLE_RIGHT) {
+			purple = "#000";
+			p = true;
+			}
+			if (ballY > SECOND_TOP && ballY < SECOND_BOTTOM && ballX > YELLOW_LEFT && ballX < YELLOW_RIGHT) {
+			yellow = "#000";
+			y = true;
+			}
+			
+		  }
+		  function colorBox(color,x,y,width,height) {
+		    ctx.fillStyle=color;
+			ctx.fillRect(x,y,width,height)
+		  }
+		  function circle(color,x,y,radius) {
+		  ctx.fillStyle=color;
+		  ctx.beginPath();
+		  ctx.arc(x,y,radius,0,Math.PI * 2);
+		  ctx.fill();
+		  }
+		  
+		 </script>
+	  </body>
+</html>
